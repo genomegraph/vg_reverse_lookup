@@ -38,6 +38,8 @@ vg view -j graph.vg > graph.json  # vgをJSONに変換する
 ```
 
 - JSONに変換すると、いわゆるゲノムグラフブラウザで可視化できる。
+  - 例：[MoMIG](http://viewer.momig.tokyo/demo3/#force_layout=false&sankey=false&path=chr12:80,851,974-80,853,202)
+    - ただし、パスの情報がないと可視化できない
 
 
 
@@ -108,6 +110,12 @@ vg view graph.vg | grep ^P | wc -l
 
 
 
+#### 指定したノードの座標が、グラフの特定のパスのどこに乗っているかを出す
+
+```
+vg find -n 10 -P chr1 -x index.xg  # IDが10のノードがchr1というパスでは、どこの座標に位置するのか
+```
+
 
 
 ### グラフの編集
@@ -146,11 +154,11 @@ cat 1.vg 2.vg > merged.vg
 #### GCSAインデックスを作成する
 
 ```
-vg index -g index.gcsa -b . graph.vg  # -bでtmpファイルをおくディレクトリを指定
+vg index -g index.gcsa -k 16 -b . graph.vg  # -bでtmpファイルをおくディレクトリを指定
 
 # メモリ消費量がしんどい場合は、
 vg prune graph.vg > prune.vg  # グラフの簡略化
-vg -g index.gcsa -b . prune.vg
+vg -g index.gcsa -k 16 -b . prune.vg  # メモリ消費量を減らすことができる
 rm prune.vg
 ```
 
