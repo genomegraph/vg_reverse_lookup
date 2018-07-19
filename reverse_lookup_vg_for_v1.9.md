@@ -211,6 +211,14 @@ vg view -a mapped.gam | jq -cr 'select(.identity >= 0.95)' | vg view -aJG - > fi
 ```
 
 
+#### マッピング結果の統計情報をみる
+
+```
+vg stats -a mapped.gam
+```
+
+
+
 #### マッピング結果のうち、リニアなパスに対応するものをbam/samファイルに射影する
 
 ```
@@ -219,6 +227,7 @@ vg surject -x index.xg -t 1 -b mapped.gam > mapped.bam
 # -p でパス名を指定すると、そのパスに対するマッピングだけを抽出できる
 vg surject -x index.xg -t 1 -s -p chr1 mapped.gam > mapped.sam
 ```
+
 
 
 #### リファレンスに対するbam/samのマッピング結果を、同じパスをもつゲノムグラフ上のgamに射影する
@@ -231,7 +240,7 @@ vg inject -x index.xg -t 1 mapped.sam > mapped.gam
 ### 遺伝子アノテーション
 
 遺伝子アノテーションをvgのグラフ上にパスとして載せるには、一度遺伝子アノテーションをゲノムグラフに対するアラインメントに変換し、それから
-パスを生成する
+パスを生成して、vgのグラフにマージするという作業を行います。
 
 #### bed/gffフォーマットのアノテーションをアラインメントに変換する
 
@@ -239,6 +248,9 @@ vg inject -x index.xg -t 1 mapped.sam > mapped.gam
 vg annotate -b input.bed -x index.xg > annotation.gam
 vg annotate -g input.gff -x index.xg > annotation.gam
 ```
+
+
+#### アラインメントをvgのパスとして追加する
 
 ```
 vg mod -P --include-aln annotation.gam graph.vg > mod.vg
