@@ -55,6 +55,16 @@ vg view -Fv hoge.gfa > graph.vg
 
 
 
+#### SPAdesのアセンブリグラフをvgに変換する
+
+```
+grep -v ^P assembly_graph_with_scaffolds.gfa | vg view -Fv - | vg mod -X 1000 - > graph.vg
+```
+
+- SPAdesはv3.11.1を使用
+
+
+
 #### vgをGraphMLで簡単に可視化
 
 ```
@@ -115,6 +125,7 @@ vg view graph.vg | grep ^P | wc -l
 ```
 vg find -n 10 -P chr1 -x index.xg  # IDが10のノードがchr1というパスでは、どこの座標に位置するのか
 ```
+
 
 
 ### グラフの編集
@@ -211,11 +222,14 @@ vg view -a mapped.gam | jq -cr 'select(.identity >= 0.95)' | vg view -aJG - > fi
 ```
 
 
+
 #### マッピング結果の統計情報をみる
 
 ```
-vg stats -a mapped.gam
+vg stats -a mapped.gam graph.vg
 ```
+
+- 計算に使わないが、位置引数が必要
 
 
 
@@ -235,6 +249,7 @@ vg surject -x index.xg -t 1 -s -p chr1 mapped.gam > mapped.sam
 ```
 vg inject -x index.xg -t 1 mapped.sam > mapped.gam
 ```
+
 
 
 ### 遺伝子アノテーション
@@ -258,6 +273,8 @@ vg mod -P --include-aln annotation.gam graph.vg > mod.vg
 # アノテーションの切れ目でノードを分割したい場合は、-P を外す
 vg mod -P --include-aln annotation.gam graph.vg > mod.vg
 ```
+
+
 
 ## TODO
 
