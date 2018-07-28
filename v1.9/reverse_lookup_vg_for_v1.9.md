@@ -191,7 +191,7 @@ rm prune.vg
 
 ```
 # xgとgcsaがあることは前提として
-vg map -x index.xg -g index.gcsa -t 1 -f 1.fq -f 2.fq > mapped.gam
+vg map -x index.xg -g index.gcsa -t 1 -f 1.fq -2 2.fq > mapped.gam
 ```
 
 
