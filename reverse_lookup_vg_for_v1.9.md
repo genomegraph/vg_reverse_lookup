@@ -140,6 +140,22 @@ vg mod -X 1000 graph.vg > graph.1000.vg  # ノードの大きさを最大で1000
 
 
 
+#### 分岐はないが、複数のノードに分離されている領域をマージする
+
+```
+vg mod -u graph.vg > merged.graph.vg
+```
+
+
+
+#### ノードIDを整理して、振り直す
+
+```
+vg mod -c graph.vg > fixed.graph.vg
+```
+
+
+
 #### 指定したノードIDからノードの個数の距離N以下のノードを含むグラフを抽出する
 
 ```
