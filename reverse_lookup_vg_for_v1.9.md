@@ -197,7 +197,7 @@ vg index -g index.gcsa -k 16 -b . graph.vg  # -bでtmpファイルをおくデ�
 
 # メモリ消費量がしんどい場合は、
 vg prune graph.vg > prune.vg  # グラフの簡略化
-vg -g index.gcsa -k 16 -b . prune.vg  # メモリ消費量を減らすことができる
+vg index -g index.gcsa -k 16 -b . prune.vg  # メモリ消費量を減らすことができる
 rm prune.vg
 ```
 
