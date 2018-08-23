@@ -28,6 +28,17 @@ vg msga -f multi.fa > graph.vg
 
 
 
+#### マルチプルアラインメントされた配列セットをグラフにする
+
+```
+clustalo -i multi.fa > msa.fa  # vg msga の代わりに汎用的なマルチプルアライナーを使う
+vg construct -F fasta -M msa.fa > graph.vg
+```
+
+
+
+
+
 ## フォーマット変換
 
 #### vgの中身を確認する
@@ -40,6 +51,7 @@ vg view -j graph.vg > graph.json  # vgをJSONに変換する
 - JSONに変換すると、いわゆるゲノムグラフブラウザで可視化できる。
   - 例：[MoMIG](http://viewer.momig.tokyo/demo3/#force_layout=false&sankey=false&path=chr12:80,851,974-80,853,202)
     - ただし、パスの情報がないと可視化できない
+    - 詳細な使い方は[ここ](https://github.com/genomegraph/workshop/blob/master/browser_tutorial/browser_tutorial.md)を参照
 
 
 
@@ -65,7 +77,7 @@ grep -v ^P assembly_graph_with_scaffolds.gfa | vg view -Fv - | vg mod -X 1000 - 
 
 
 
-#### vgをGraphMLで簡単に可視化
+#### vgをGraphvizで簡単に可視化
 
 ```
 vg view -d graph.vg | dot -Tpng -o vis.png  # vgをdot形式にする
