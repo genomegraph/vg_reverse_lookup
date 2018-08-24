@@ -321,6 +321,28 @@ vg mod -P --include-aln annotation.gam graph.vg > mod.vg
 
 
 
+### WIP: グラフからの情報抽出
+
+怪しいところもあるので注意
+
+
+
+#### BubbleになっているノードIDのリストを抽出する
+
+```
+vg snarls -m 1000 -r list.st graph.vg > snarls.pb
+vg view -E list.st | jq '.visit[1:-1][].node_id | select(. != null) | tonumber' | sort -n | uniq > node_list_in_ultra_bubble.txt
+
+# コア領域(=ハブになっている領域)のノードIDのリストを抽出には
+vg view graph.vg | grep ^S | cut -f 2 | grep -vwf node_list_in_ultra_bubble.txt > node_list_of_core_region.txt
+```
+
+- 用語の定義は[Paten et al.](https://www.biorxiv.org/content/early/2017/01/18/101493)を参照
+-  `vg snarls` の `-m` は helpでは `<=` だが、 [ソースコード](https://github.com/vgteam/vg/blob/02a085c1f9902d94a25e8cdffafc16eb7ff8a4a2/src/subcommand/snarls_main.cpp#L228)では `<` となっているので注意
+
+
+
+
 ## TODO
 
 - valiant callの話
