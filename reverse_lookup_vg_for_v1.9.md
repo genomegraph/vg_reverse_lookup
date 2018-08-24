@@ -316,7 +316,7 @@ vg annotate -g input.gff -x index.xg > annotation.gam
 vg mod -P --include-aln annotation.gam graph.vg > mod.vg
 
 # アノテーションの切れ目でノードを分割したい場合は、-P を外す
-vg mod -P --include-aln annotation.gam graph.vg > mod.vg
+vg mod --include-aln annotation.gam graph.vg > mod.vg
 ```
 
 
