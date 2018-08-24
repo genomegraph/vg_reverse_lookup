@@ -52,7 +52,7 @@ vg view -Fv hoge.gfa > graph.vg
 
 - [A bug in GFA parser with overlap with v1.9.0 was fixed] (https://github.com/vgteam/vg/pull/1765)
 - When using assembly graph for downstream analysis, this
-  - If you use `minia` as an assembler, you can use [here] (https://github.com/Pfern/PANGenomics/blob/5923c991962396f30ce8adef9eef4d0a1ecd68b8/exercises/bacteria/README.md#gfa-input-to-vg-from-minia- and-bcalm)
+  - If you use `minia` as an assembler, you can use [here](https://github.com/Pfern/PANGenomics/blob/5923c991962396f30ce8adef9eef4d0a1ecd68b8/exercises/bacteria/README.md#gfa-input-to-vg-from-minia-sand-bcalm)
 
 
 
