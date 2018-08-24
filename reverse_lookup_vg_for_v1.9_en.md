@@ -39,7 +39,7 @@ vg view -j graph.vg > convert graph.json # vg to JSON
 ```
 
 - By converting into JSON format, it can be visualized the genome graph by using a genome graph browser such as MoMIG.
-  - Example: [MoMIG] (http://viewer.momig.tokyo/demo 3/#force_layout = false & sankey = false & path = chr 12: 80, 851, 974 - 80, 853, 202)
+  - Example:[MoMIG](http://viewer.momig.tokyo/demo3/#force_layout=false&sankey=false&path=chr12:80,851,974-80,853,202)
     - Note: path information is mandately.
 
 
