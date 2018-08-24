@@ -172,10 +172,10 @@ vg find -n 5 -c 10 -L -x index.xg > node5.dis10.vg # Extracting the graph consis
 ```
 
 
-#### From the coordinates on the specified path, extract a graph containing nodes whose number is less than or equal to the number of nodes
+#### Extracting a graph consisting of nodes whose number is less than or equal to N from the specified path, e
 
 ```
-vg find -n 5 -c 10 -p chr 1:50000-55520 -x index.xg> chr1:50000-55520.vg # chr 1: 50000 - 55520 and the nodes that are away from it by 10 Extract graph of
+vg find -n 5 -c 10 -p chr 1:50000-55520 -x index.xg > chr1:50000-55520.vg # chr1:50000-55520 and the nodes that are away from it by 10 Extract graph of
 ```
 
 
@@ -205,7 +205,7 @@ rm prune.vg
 
 
 
-#### Mapping paired-end leads
+#### Mapping paired-end reads
 
 ```
 #It is assumed that xg and gcsa files exist
