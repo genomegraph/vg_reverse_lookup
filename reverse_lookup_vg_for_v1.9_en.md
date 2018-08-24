@@ -199,7 +199,7 @@ vg index -g index.gcsa -k 16 -b . graph.vg # Option -b specifies the directory w
 
 # When memory consumption is too large,
 vg prune graph.vg > prune.vg # Firstly simplifying the graph
-vg index -g index.gcsa -k 16 -b . prune.vg # The foregoing commnad can be executed with less memory
+vg index -g index.gcsa -k 16 -b . prune.vg # Then the foregoing commnad can be executed with less memory
 rm prune.vg
 ```
 
