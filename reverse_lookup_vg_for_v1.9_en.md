@@ -2,7 +2,7 @@
 
 ## The objectives
 
-There are a variety of informative tutorials for `vg` such as ([Main Wiki](https://github.com/vgteam/vg/wiki/Basic-Operations) and [Workshop in Portuguese](https://github.com/Pfern/PANGenomics)). However it is not easy to find a vg subcommand and options for what user want to do from these materials. To address this, I have organized the vg subcommands and options so that I can find these from what I want to do.
+There are a variety of informative tutorials for `vg` such as ([Main Wiki](https://github.com/vgteam/vg/wiki/Basic-Operations) and [Workshop in Portuguese](https://github.com/Pfern/PANGenomics)). However when we do not know right vg subcommand and options for what we want to do, it is not easy to find them from these tutorials. To address this, we have organized command line examples of vg in temrs of what we want to do.
 
 The version is `v1.9.0 "Miglionico"`. The static binary and Docker image are available from [here](https://github.com/vgteam/vg/releases/tag/v1.9.0).
 
@@ -187,7 +187,14 @@ cat 1.vg 2.vg > merged.vg
 ```
 
 
+#### Extending the reference graph by adding the mutation information of the query sequence
 
+```
+vg augment -a direct grpah.vg aln.gam > aug.vg
+```
+
+- From v1.10.0 onwards, Is the default of the option `-a` `direct` instead of` pileup`? → [Reference](https://github.com/vgteam/vg/pull/1824)
+- Unlike `vg mod -i`, it does not put path information. For the difference between these two, please refer [here](https://github.com/vgteam/vg/issues/1801)
 
 
 ### Mapping
@@ -293,8 +300,24 @@ vg mod --include-aln annotation.gam graph.vg > mod.vg
 ```
 
 
+### WIP: Extracting subgraph related information from a graph
+
+Please be aware that there are uncertain points at present
+
+
+#### Showing a list of nodes which are forming snarls.
+
+```
+vg snarls -m 1000 -r list.st graph.vg > snarls.pb
+vg view -E list.st | jq '.visit[1: -1][].node_id | select (.! = null) | tonumber' | sort -n | uniq > node_list_in_ultra_bubble.txt
+
+# Showing nodes in core regions (i.e. hub structures in a graph)
+vg view graph.vg | grep ^S | cut -f 2 | grep -vwf node_list_in_ultra_bubble.txt > node_list_of_core_region.txt
+```
+
+- A Snarl is a generalization of the superbubble which is a subgraph of a genome graph. For the definition of terms, please refer to [Paten et al.](Https://www.biorxiv.org/content/early/2017/01/18/101493)
+- Note: there is an inconsistency (as of Aug 27, 2018) that the `-m` option of `vm snarls` only compute traversals for snarls with `<=` N nodes in the help message, but `<` according to the [SourceCode](https://github.com/vgteam/vg/blob/02a085c1f9902d94a25e8cdffafc16eb7ff8a4a2/src/subcommand/snarls_main.cpp#L228)
 
 ## TODO
 
 - Story of valiant call
-- Examples of using `vg augment`
