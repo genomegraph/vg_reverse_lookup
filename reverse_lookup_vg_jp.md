@@ -26,7 +26,7 @@ vg construct -r ref.fa -v valiant.vcf > graph.vg
 vg msga -f multi.fa > graph.vg
 ```
 
-- 挙動が変わったらしいが、未確認
+-  [X-dropが追加された](https://github.com/vgteam/vg/pull/1752)
 
 
 
@@ -236,6 +236,8 @@ rm prune.vg
 # xgとgcsaがあることは前提として
 vg map -x index.xg -g index.gcsa -t 1 -f 1.fq -f 2.fq > mapped.gam
 ```
+
+- [X-dropが追加された](https://github.com/vgteam/vg/pull/1752)
 
 
 
