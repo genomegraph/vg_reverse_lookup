@@ -4,7 +4,7 @@
 
 `vg` のチュートリアルはいろいろある([本家のwiki](https://github.com/vgteam/vg/wiki/Basic-Operations)や[ポルトガルでの講習会](https://github.com/Pfern/PANGenomics))が、「〇〇をしたいときにどんなコマンドを使えばいいのかわからない」ときに、これらの資料を探すのはすごくしんどい。そこで、やりたいことベースで `vg` コマンドの使い方を探せるように、コマンドを整理してみた。  
 
-バージョンは `v1.9.0 "Miglionico"` とする。static binary または docker imageは[ここ](https://github.com/vgteam/vg/releases/tag/v1.9.0) から入手可能。
+バージョンは `v1.10.0 "Rionero"` とする。static binary または docker imageは[ここ](https://github.com/vgteam/vg/releases/tag/v1.10.0) から入手可能。
 
 
 
@@ -25,6 +25,8 @@ vg construct -r ref.fa -v valiant.vcf > graph.vg
 ```
 vg msga -f multi.fa > graph.vg
 ```
+
+- 挙動が変わったらしいが、未確認
 
 
 
@@ -61,7 +63,6 @@ vg view -j graph.vg > graph.json  # vgをJSONに変換する
 vg view -Fv hoge.gfa > graph.vg
 ```
 
-- [v1.9.0 でオーバーラップつきGFAパーサーのバグがとれた(らしい)](https://github.com/vgteam/vg/pull/1765)
 - アセンブリグラフを下流の解析に用いるときはこれ
   - アセンブラとして `minia` を使うなら、[ここ](https://github.com/Pfern/PANGenomics/blob/5923c991962396f30ce8adef9eef4d0a1ecd68b8/exercises/bacteria/README.md#gfa-input-to-vg-from-minia-and-bcalm)を参照
 
@@ -207,7 +208,7 @@ cat 1.vg 2.vg > merged.vg
 vg augment -a direct grpah.vg aln.gam > aug.vg
 ```
 
-- v1.10.0以降では、 `-a` のデフォルトは `pileup` ではなく`direct` になるのでは？→ [参考](https://github.com/vgteam/vg/pull/1824)
+- v1.10.0で、 `-a` のデフォルトは `pileup` ではなく`direct` に[なった](https://github.com/vgteam/vg/pull/1824)
 -  `vg mod -i` と違ってパスの情報は載せない。この2つの違いは[ここ](https://github.com/vgteam/vg/issues/1801)を参照
 
 
@@ -338,7 +339,7 @@ vg view graph.vg | grep ^S | cut -f 2 | grep -vwf node_list_in_ultra_bubble.txt 
 ```
 
 - 用語の定義は[Paten et al.](https://www.biorxiv.org/content/early/2017/01/18/101493)を参照
--  `vg snarls` の `-m` は helpでは `<=` だが、 [ソースコード](https://github.com/vgteam/vg/blob/02a085c1f9902d94a25e8cdffafc16eb7ff8a4a2/src/subcommand/snarls_main.cpp#L228)では `<` となっているので注意
+- `vg snarls` の `-m` は helpでは `<=` だが、 [ソースコード](https://github.com/vgteam/vg/blob/02a085c1f9902d94a25e8cdffafc16eb7ff8a4a2/src/subcommand/snarls_main.cpp#L228)では `<` となっているので注意 → [v1.10.0で修正](https://github.com/vgteam/vg/pull/1840)
 
 
 
