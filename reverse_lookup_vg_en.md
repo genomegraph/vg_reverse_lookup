@@ -1,10 +1,10 @@
-# vg command dictionary
+# VG Reverse Lookup Cheat Sheet
 
 ## The objectives
 
 There are a variety of informative tutorials for `vg` such as ([Main Wiki](https://github.com/vgteam/vg/wiki/Basic-Operations) and [Workshop in Portuguese](https://github.com/Pfern/PANGenomics)). However when we do not know right vg subcommand and options for what we want to do, it is not easy to find them from these tutorials. To address this, we have organized command line examples of vg in temrs of what we want to do.
 
-The version is `v1.9.0 "Miglionico"`. The static binary and Docker image are available from [here](https://github.com/vgteam/vg/releases/tag/v1.9.0).
+The version is `v1.10.0 "Rionero"`. The static binary and Docker image are available from [here](https://github.com/vgteam/vg/releases/tag/v1.10.0).
 
 
 
@@ -13,7 +13,7 @@ The version is `v1.9.0 "Miglionico"`. The static binary and Docker image are ava
 
 ### Constructing a graph from a sequence
 
-#### Construcint a graph from a reference genome sequence and valiant call information
+#### Constructing a graph from a reference genome sequence and valiant call information
 
 ```
 vg construct -r ref.fa -v valiant.vcf > graph.vg
@@ -21,13 +21,13 @@ vg construct -r ref.fa -v valiant.vcf > graph.vg
 
 
 
-#### Constructing a graph from multiple sequence alignments
+#### Constructing a graph from a multiple sequence alignment
 
 ```
 vg msga -f multi.fa > graph.vg
 ```
 
-
+- [X-drop DP algorithm was added](https://github.com/vgteam/vg/pull/1752)
 
 ## Format conversion
 
@@ -193,8 +193,10 @@ cat 1.vg 2.vg > merged.vg
 vg augment -a direct grpah.vg aln.gam > aug.vg
 ```
 
-- From v1.10.0 onwards, Is the default of the option `-a` `direct` instead of` pileup`? → [Reference](https://github.com/vgteam/vg/pull/1824)
-- Unlike `vg mod -i`, it does not put path information. For the difference between these two, please refer [here](https://github.com/vgteam/vg/issues/1801)
+- From v1.10.0 or later, the default of the option `-a` is `direct` instead of` pileup` [Reference](https://github.com/vgteam/vg/pull/1824).
+- Unlike `vg mod -i`, it does not put path information. For the difference between these two, please refer [here](https://github.com/vgteam/vg/issues/1801).
+
+
 
 
 ### Mapping
@@ -254,7 +256,7 @@ vg view - a mapped.gam | jq - cr 'select (.identity> = 0.95)' | vg view - aJG - 
 vg stats -a mapped.gam graph.vg
 ```
 
-- It is not used for calculation, but position argument is necessary
+- It is not used for the calculation, but position argument is necessary
 
 
 
@@ -316,7 +318,7 @@ vg view graph.vg | grep ^S | cut -f 2 | grep -vwf node_list_in_ultra_bubble.txt 
 ```
 
 - A Snarl is a generalization of the superbubble which is a subgraph of a genome graph. For the definition of terms, please refer to [Paten et al.](Https://www.biorxiv.org/content/early/2017/01/18/101493)
-- Note: there is an inconsistency (as of Aug 27, 2018) that the `-m` option of `vm snarls` only compute traversals for snarls with `<=` N nodes in the help message, but `<` according to the [SourceCode](https://github.com/vgteam/vg/blob/02a085c1f9902d94a25e8cdffafc16eb7ff8a4a2/src/subcommand/snarls_main.cpp#L228)
+- Note: there is an inconsistency (as of Aug 27, 2018) that the `-m` option of `vm snarls` only compute traversals for snarls with `<=` N nodes in the help message, but `<` according to the [SourceCode](https://github.com/vgteam/vg/blob/02a085c1f9902d94a25e8cdffafc16eb7ff8a4a2/src/subcommand/snarls_main.cpp#L228) -> [Fixed in v1.10.0](https://github.com/vgteam/vg/pull/1840)
 
 ## TODO
 
