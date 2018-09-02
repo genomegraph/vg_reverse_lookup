@@ -148,6 +148,8 @@ vg stats -H graph.vg  # headがあるかの確認
 vg stats -T graph.vg  # tail
 ```
 
+- headから処理を開始するコマンドがいくつかあるので、意図した動作をしないときはこのコマンドで確認するとよい
+
 
 
 #### サブグラフの情報を出す
@@ -185,7 +187,8 @@ vg mod -u graph.vg > merged.graph.vg
 #### ノードIDを整理して、振り直す
 
 ```
-vg mod -c graph.vg > fixed.graph.vg
+vg mod -c graph.vg > fixed.graph.vg  # 今のノードIDをソートして振り直す
+vg ids -s graph.vg > rename.vg  # 1スタートで新しいノードIDを振り直す
 ```
 
 
