@@ -148,7 +148,8 @@ vg stats -H graph.vg  # headがあるかの確認
 vg stats -T graph.vg  # tail
 ```
 
-- headから処理を開始するコマンドがいくつかあるので、意図した動作をしないときはこのコマンドで確認するとよい
+- headから処理を開始するコマンドがいくつかあるので、意図した動作をしないときはこのコマンドで確認するとよい。ここでいうhead nodeとは、右側からエッジが生えていないノードのことである。
+  - [参考図](https://github.com/vgteam/vg/wiki/visualization#visualizing-bidirectional-sequence-graphs)
 
 
 
