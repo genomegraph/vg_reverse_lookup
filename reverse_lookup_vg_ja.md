@@ -141,6 +141,27 @@ vg find -n 10 -P chr1 -x index.xg  # IDが10のノードがchr1というパス�
 
 
 
+#### グラフにheadやtailがあるかどうかを確認する
+
+```
+vg stats -H graph.vg  # headがあるかの確認
+vg stats -T graph.vg  # tail
+```
+
+
+
+#### サブグラフの情報を出す
+
+```
+vg stats -s graph.vg > subgraph.tsv
+```
+
+- 1列目はノードIDのリスト、2列目はサブグラフのサイズ
+
+
+
+
+
 ### グラフの編集
 
 #### ノードの長さをN塩基以下に切る
@@ -200,6 +221,8 @@ vg ids -j 1.vg 2.vg  # ノードIDを揃える
 cat 1.vg 2.vg > merged.vg
 ```
 
+- 破壊的な変更なので注意
+
 
 
 #### クエリ配列の変異情報をリファレンスに加えてグラフを拡張する
@@ -212,6 +235,40 @@ vg augment -a direct grpah.vg aln.gam > aug.vg
 -  `vg mod -i` と違ってパスの情報は載せない。この2つの違いは[ここ](https://github.com/vgteam/vg/issues/1801)を参照
 
 
+
+#### 1つのvgファイルをサブグラフごとのファイルに分ける
+
+```
+vg explode graph.vg subgraph_dir
+```
+
+
+
+#### アラインメントされた領域だけ抽出する
+
+```
+vg find -G aln.gam graph.vg > aligned_region.vg
+```
+
+
+
+#### サブグラフをサイズでフィルタリングする
+
+```
+vg mod -l 1000 -S graph.vg > graph.1000.vg  # サイズが1000以下のサブグラフを除去する
+```
+
+- headがないグラフは[除かれない](https://github.com/vgteam/vg/blob/4f4e5516abe873e1e6322014597ede500849cef3/src/vg.cpp#L6910-L6950)ので、自分で除く必要がある( `vg explode` を使うとか？)
+
+
+
+#### ゲノムを環状にする
+
+```
+vg circularize -p chr1 graph.vg > circularized.vg
+```
+
+- 先頭のノードIDと最後尾のノードIDの間にエッジをはる
 
 
 
