@@ -377,10 +377,11 @@ vg annotate -g input.gff -x index.xg > annotation.gam
 #### アラインメントをvgのパスとして追加する
 
 ```
-vg mod -P --include-aln annotation.gam graph.vg > mod.vg
+# GAMファイルのeditの情報を用いてグラフを拡張し、その上でパスを追加する
+vg mod -i annotation.gam graph.vg > mod.vg
 
-# アノテーションの切れ目でノードを分割したい場合は、-P を外す
-vg mod --include-aln annotation.gam graph.vg > mod.vg
+# グラフの拡張は行わず、パスだけを追加する場合は-Pをつける
+vg mod -P -i annotation.gam graph.vg > graph.include_path.vg
 ```
 
 
