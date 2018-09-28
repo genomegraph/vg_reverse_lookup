@@ -289,9 +289,11 @@ vg index -g index.gcsa -k 16 -b . prune.vg  # メモリ消費量を減らすこ�
 rm prune.vg
 ```
 
--  k-mer列挙などでたくさんの中間ファイルが `TMPDIR` にできる。↓([ここ](https://github.com/vgteam/vg/wiki/working-with-a-whole-genome-variation-graph)より引用)にあるように結構ディスク容量を食うので、gcsaファイルを作るときは、1. tmpファイルをどこに置くのか、2. ディスク容量の空きは大丈夫か、という2点に気をつけなければならない
+- k-mer列挙などでたくさんの中間ファイルが `TMPDIR` にできる。↓([ここ](https://github.com/vgteam/vg/wiki/working-with-a-whole-genome-variation-graph)より引用)にあるように結構ディスク容量を食うので、gcsaファイルを作るときは、1. tmpファイルをどこに置くのか、2. ディスク容量の空きは大丈夫か、という2点に気をつけなければならない
 
   - > **important**: The location of the temporary files created for this process is specified using the TMPDIR environment variable. Make sure it is set to a volume a couple of terabytes of free space
+
+-  拡張子は慣用的に `.gcsa` が用いられているが、[実装されているのはGCSA2である](https://github.com/vgteam/vg/blob/65cef16db927008bfbee50c072907c25a3853bf1/src/subcommand/index_main.cpp#L61)
 
 
 
