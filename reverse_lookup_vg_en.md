@@ -21,7 +21,7 @@ vg construct -r ref.fa -v valiant.vcf > graph.vg
 
 
 
-#### Constructing a graph from a multiple sequence alignment from all sequences
+#### Constructing a graph from a multiple sequence with merging one by one
 
 ```
 vg msga -f multi.fa > graph.vg
