@@ -21,13 +21,22 @@ vg construct -r ref.fa -v valiant.vcf > graph.vg
 
 
 
-#### Constructing a graph from a multiple sequence alignment
+#### Constructing a graph from a multiple sequence alignment from all sequences
 
 ```
 vg msga -f multi.fa > graph.vg
 ```
 
 - [X-drop DP algorithm was added](https://github.com/vgteam/vg/pull/1752)
+
+
+#### Converting a graph from a multiple sequence alignment 
+
+```
+clustalo -i multi.fa > msa.fa  # Use a multiple aligner instead of vg msga
+vg construct -F fasta -M msa.fa > graph.vg
+```
+
 
 ## Format conversion
 
@@ -50,7 +59,6 @@ vg view -j graph.vg > convert graph.json # vg to JSON
 vg view -Fv hoge.gfa > graph.vg
 ```
 
-- [A bug in GFA parser with overlap with v1.9.0 was fixed] (https://github.com/vgteam/vg/pull/1765)
 - When using assembly graph for downstream analysis, this
   - If you use `minia` as an assembler, you can use [here](https://github.com/Pfern/PANGenomics/blob/5923c991962396f30ce8adef9eef4d0a1ecd68b8/exercises/bacteria/README.md#gfa-input-to-vg-from-minia-sand-bcalm)
 
@@ -66,7 +74,7 @@ grep -v ^P assembly_graph_with_scaffolds.gfa | vg view -Fv - | vg mod -X 1000 - 
 
 
 
-#### Visualizing vg format with GraphML
+#### Visualizing vg format with Graphviz
 
 ```
 vg view -d graph.vg | dot -Tpng -o vis.png # Converting vg format into dot format
@@ -95,7 +103,7 @@ vg view -a mapped.gam > mapped.json
 
 ## Using graphs
 
-### Shwoing statistics of a graph
+### Showing statistics of a graph
 
 #### Showing the total number of bases in a graph
 
@@ -127,6 +135,25 @@ vg view graph.vg | grep ^P | wc -l
 vg find -n 10 -P chr1 -x index.xg # Where is the coodinate of the node ID 10 on the path chr 1.
 ```
 
+#### Showing the number of heads and tails
+
+```
+vg stats -H graph.vg  # heads
+vg stats -T graph.vg  # tails
+```
+
+- Confirm if the graph has heads or tails by this command
+  - [Reference](https://github.com/vgteam/vg/wiki/visualization#visualizing-bidirectional-sequence-graphs)
+
+
+#### Showing the information of subgraphs
+
+```
+vg stats -s graph.vg > subgraph.tsv
+```
+
+- Column 1 is the list of node ids, and column2 is the size of the subgraph.
+
 
 
 ### Edit a graph
@@ -152,7 +179,8 @@ vg mod -u graph.vg > merged.graph.vg
 #### Reassigning the node IDs
 
 ```
-vg mod -c graph.vg > fixed.graph.vg
+vg mod -c graph.vg > fixed.graph.vg # Sort node ids keeping current set of node ids
+vg ids -s graph.vg > rename.vg  # Reassign node ids from 1-origin
 ```
 
 
@@ -186,6 +214,7 @@ vg ids -j 1.vg 2.vg # Aligning node IDs of 1.vg and 2.vg
 cat 1.vg 2.vg > merged.vg
 ```
 
+- This command modifies the original file in-place although other commands output modified graph to STDOUT
 
 #### Extending the reference graph by adding the mutation information of the query sequence
 
@@ -197,6 +226,39 @@ vg augment -a direct grpah.vg aln.gam > aug.vg
 - Unlike `vg mod -i`, it does not put path information. For the difference between these two, please refer [here](https://github.com/vgteam/vg/issues/1801).
 
 
+#### Break a graph into connected components in their own files in the given directory
+
+```
+vg explode graph.vg subgraph_dir
+```
+
+
+
+#### Accumulate the graph touched by the alignments in the GAM
+
+```
+vg find -G aln.gam graph.vg > aligned_region.vg
+```
+
+
+
+#### Remove subgraphs by length
+
+```
+vg mod -l 1000 -S graph.vg > graph.1000.vg  # Remove subgraphs which are shorter than 1,000 bp
+```
+
+- The graph without heads cannot be removed so manually filter is required (i.e. by `vg explode` ).
+  - [Reference](https://github.com/vgteam/vg/blob/4f4e5516abe873e1e6322014597ede500849cef3/src/vg.cpp#L6910-L6950)
+
+
+#### Make spacific paths or nodes in a graph circular
+
+```
+vg circularize -p chr1 graph.vg > circularized.vg
+```
+
+- Circularize the path by connecting its head/tail node
 
 
 ### Mapping
@@ -212,7 +274,15 @@ vg index -g index.gcsa -k 16 -b . prune.vg # Then the foregoing commnad can be e
 rm prune.vg
 ```
 
+- Because many large intermediate files are yielded in `TMPDIR` on generating k-mers, you should confirm the following two points.
+  - Location of TMPDIR
+  - Enough disk space
+    - [Reference](https://github.com/vgteam/vg/wiki/working-with-a-whole-genome-variation-graph)
+      - > **important**: The location of the temporary files created for this process is specified using the TMPDIR environment variable. Make sure it is set to a volume a couple of terabytes of free space
 
+
+- Although the file extention is `.gcsa`, the implementation is not GCSA but GCSA2. 
+  - [Reference](https://github.com/vgteam/vg/blob/65cef16db927008bfbee50c072907c25a3853bf1/src/subcommand/index_main.cpp#L61)
 
 #### Mapping paired-end reads
 
@@ -222,6 +292,7 @@ vg map -x index.xg -g index.gcsa -t 1 -f 1 fq -f 2.fq > mapped.gam
 ```
 
 
+- [X-drop DP algorithm was added](https://github.com/vgteam/vg/pull/1752)
 
 #### Calculating the read coverage of each base
 
@@ -294,13 +365,12 @@ vg annotate -g input.gff -x index.xg > annotation.gam
 #### Adding an alignment file to a graph as vg path
 
 ```
-vg mod -P --include-aln annotation.gam graph.vg > mod.vg
+# Embed GAM alignments into a graph, and then merge the paths implied by alignments into the graph
+vg mod -i annotation.gam graph.vg > mod.vg
 
-# If you want to split the node at the breaks of the annotation, remove -P
-# If you want to align node splittings with annotations, remove the -P option
-vg mod --include-aln annotation.gam graph.vg > mod.vg
+# Don't edit with -i alignments, just use them for labeling the graph
+vg mod -P -i annotation.gam graph.vg > graph.include_path.vg
 ```
-
 
 ### WIP: Extracting subgraph related information from a graph
 
@@ -317,9 +387,9 @@ vg view -E list.st | jq '.visit[1: -1][].node_id | select (.! = null) | tonumber
 vg view graph.vg | grep ^S | cut -f 2 | grep -vwf node_list_in_ultra_bubble.txt > node_list_of_core_region.txt
 ```
 
-- A Snarl is a generalization of the superbubble which is a subgraph of a genome graph. For the definition of terms, please refer to [Paten et al.](Https://www.biorxiv.org/content/early/2017/01/18/101493)
+- A Snarl is a generalization of the superbubble which is a subgraph of a genome graph. For the definition of terms, please refer to [Paten et al.](https://www.biorxiv.org/content/early/2017/01/18/101493)
 - Note: there is an inconsistency (as of Aug 27, 2018) that the `-m` option of `vm snarls` only compute traversals for snarls with `<=` N nodes in the help message, but `<` according to the [SourceCode](https://github.com/vgteam/vg/blob/02a085c1f9902d94a25e8cdffafc16eb7ff8a4a2/src/subcommand/snarls_main.cpp#L228) -> [Fixed in v1.10.0](https://github.com/vgteam/vg/pull/1840)
 
 ## TODO
 
-- Story of valiant call
+- How to call variants

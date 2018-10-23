@@ -416,4 +416,4 @@ vg view graph.vg | grep ^S | cut -f 2 | grep -vwf node_list_in_ultra_bubble.txt 
 
 ## TODO
 
-- valiant callの話
+- variant callの話
